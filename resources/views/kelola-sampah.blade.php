@@ -571,7 +571,7 @@
             </div>
 
             <button class="btn-add" onclick="openAddModal()">
-                ＋ Tambah Harga
+                ＋ Tambah Jenis Sampah
             </button>
 
         </div>
@@ -706,17 +706,13 @@
 
             <div class="form-group">
 
-                <label>
-                    Jenis Sampah
-                </label>
+                <label>Jenis Sampah</label>
 
-                <select id="jenisSampah">
-
-                    <option value="">
-                        Pilih jenis sampah
-                    </option>
-
-                </select>
+                <input
+                    type="text"
+                    id="jenisSampah"
+                    placeholder="Contoh: Botol Kaca"
+                >
 
             </div>
 
@@ -1049,15 +1045,13 @@
         function openAddModal() {
 
             document.getElementById('modalTitle').textContent =
-                'Tambah Harga Sampah';
+                'Tambah Jenis Sampah';
 
             document.getElementById('editId').value = '';
 
             document.getElementById('jenisSampah').value = '';
 
             document.getElementById('harga').value = '';
-
-            document.getElementById('status').value = '1';
 
             document
                 .getElementById('modal')
@@ -1137,116 +1131,82 @@
             const id =
                 document.getElementById('editId').value;
 
-            const idJenis =
+            const namaSampah =
                 document.getElementById('jenisSampah').value;
 
             const harga =
                 document.getElementById('harga').value;
 
-            const status =
-                document.getElementById('status').value;
-
-
-            if (!idJenis || !harga) {
-
-                alert(
-                    'Jenis sampah dan harga wajib diisi.'
-                );
-
+            if (!namaSampah || !harga) {
+                alert('Jenis sampah dan harga wajib diisi.');
                 return;
             }
 
-
             const data = {
-
-                id_jenis_sampah: idJenis,
-
-                harga_per_kg: harga,
-
-                status: status
-
+                nama_sampah: namaSampah,
+                harga_per_kg: harga
             };
-
 
             try {
 
                 let response;
 
-
                 if (id) {
 
-                    /*
-                    EDIT
-                    */
-
+                    // EDIT HARGA
                     response = await fetch(
                         `/api/harga-sampah/${id}`,
                         {
                             method: 'PUT',
-
                             headers: {
-                                'Content-Type':
-                                    'application/json',
-
-                                'Accept':
-                                    'application/json'
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
                             },
-
-                            body: JSON.stringify(data)
+                            body: JSON.stringify({
+                                harga_per_kg: harga
+                            })
                         }
                     );
 
                 } else {
 
-                    /*
-                    TAMBAH
-                    */
-
+                    // TAMBAH JENIS SAMPAH + HARGA
                     response = await fetch(
-                        '/api/harga-sampah',
+                        '/api/jenis-sampah-dengan-harga',
                         {
                             method: 'POST',
-
                             headers: {
-                                'Content-Type':
-                                    'application/json',
-
-                                'Accept':
-                                    'application/json'
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
                             },
-
                             body: JSON.stringify(data)
                         }
                     );
-
                 }
-
 
                 if (!response.ok) {
 
-                    const error =
-                        await response.json();
+                    const error = await response.json();
 
                     console.error(error);
 
                     alert(
+                        error.message ??
                         'Gagal menyimpan data.'
                     );
 
                     return;
-
                 }
-
 
                 alert(
                     id
-                    ? 'Harga berhasil diperbarui.'
-                    : 'Harga berhasil ditambahkan.'
+                        ? 'Harga berhasil diperbarui.'
+                        : 'Jenis sampah dan harga berhasil ditambahkan.'
                 );
-
 
                 closeModal();
 
+                await loadJenisSampah();
                 await loadHarga();
 
             } catch (error) {
@@ -1256,9 +1216,7 @@
                 alert(
                     'Terjadi kesalahan saat menyimpan data.'
                 );
-
             }
-
         }
 
 
