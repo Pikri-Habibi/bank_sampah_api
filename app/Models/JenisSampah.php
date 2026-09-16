@@ -19,4 +19,5 @@ class JenisSampah extends Model
     {
         return $this->hasMany(HargaSampah::class, 'id_jenis_sampah', 'id_jenis_sampah');
     }
+    
 }
