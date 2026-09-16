@@ -550,77 +550,7 @@
          SIDEBAR
     ========================= -->
 
-    <aside class="sidebar">
-
-        <div class="brand">
-
-            <div class="brand-icon">
-                ♻
-            </div>
-
-            <div class="brand-name">
-                Bank Sampah<br>
-                Griya Ayu
-            </div>
-
-        </div>
-
-        <div class="menu-title">
-            Menu Koordinator
-        </div>
-
-        <nav class="menu">
-
-            <a href="/dashboard-admin">
-                <span class="menu-icon">▦</span>
-                <span>Dashboard</span>
-            </a>
-
-            <a href="/kelola-sampah" class="active">
-                <span class="menu-icon">▤</span>
-                <span>Kelola Sampah</span>
-            </a>
-
-            <a href="#">
-                <span class="menu-icon">◎</span>
-                <span>Manajemen Pengguna</span>
-            </a>
-
-            <a href="#">
-                <span class="menu-icon">↗</span>
-                <span>Laporan</span>
-            </a>
-
-        </nav>
-
-        <div class="sidebar-bottom">
-
-            <div class="user-info">
-
-                <div class="user-avatar">
-                    S
-                </div>
-
-                <div>
-                    <div class="user-name">
-                        Ibu Dina
-                    </div>
-
-                    <div class="user-role">
-                        Admin
-                    </div>
-                </div>
-
-            </div>
-
-            <a href="#" class="logout">
-                ⇥ Keluar
-            </a>
-
-        </div>
-
-    </aside>
-
+    @include('layouts.sidebar-admin')
 
     <!-- =========================
          MAIN
