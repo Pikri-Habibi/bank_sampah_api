@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HargaSampah;
+use Illuminate\Support\Facades\DB;
 use App\Models\JenisSampah;
 use Illuminate\Http\Request;
 
@@ -28,6 +30,37 @@ class JenisSampahController extends Controller
             'message' => 'Jenis sampah berhasil ditambahkan',
             'data' => $data
         ], 201);
+    }
+
+    public function storeWithHarga(Request $request)
+    {
+        $request->validate([
+            'nama_sampah' => 'required|string|max:255',
+            'harga_per_kg' => 'required|numeric|min:0',
+        ]);
+
+        return DB::transaction(function () use ($request) {
+
+            // Buat jenis sampah baru
+            $jenisSampah = JenisSampah::create([
+                'nama_sampah' => $request->nama_sampah,
+            ]);
+
+            // Buat harga untuk jenis sampah tersebut
+            $hargaSampah = HargaSampah::create([
+                'id_jenis_sampah' => $jenisSampah->id_jenis_sampah,
+                'harga_per_kg' => $request->harga_per_kg,
+                'tanggal_berlaku' => now(),
+            ]);
+
+            return response()->json([
+                'message' => 'Jenis sampah dan harga berhasil ditambahkan',
+                'data' => [
+                    'jenis_sampah' => $jenisSampah,
+                    'harga_sampah' => $hargaSampah,
+                ]
+            ], 201);
+        });
     }
 
     public function update(Request $request, $id)

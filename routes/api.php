@@ -12,6 +12,8 @@ Route::put('/jenis-sampah/{id}', [JenisSampahController::class, 'update']);
 
 Route::delete('/jenis-sampah/{id}', [JenisSampahController::class, 'destroy']);
 
+Route::post('/jenis-sampah-dengan-harga', [JenisSampahController::class, 'storeWithHarga']);
+
 Route::post('/harga-sampah', [HargaSampahController::class, 'store']);
 
 Route::get('/harga-sampah', [HargaSampahController::class, 'index']);
