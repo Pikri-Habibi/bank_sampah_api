@@ -35,12 +35,14 @@ class HargaSampahController extends Controller
     {
         $request->validate([
             'harga_per_kg' => 'required|numeric|min:0',
+            'status' => 'required|boolean',
         ]);
 
         $harga = HargaSampah::findOrFail($id);
 
         $harga->update([
             'harga_per_kg' => $request->harga_per_kg,
+            'status' => $request->status,
             'tanggal_berlaku' => now(),
         ]);
 
