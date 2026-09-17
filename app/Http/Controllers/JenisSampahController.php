@@ -66,7 +66,7 @@ class JenisSampahController extends Controller
 
             $jenisSampah = JenisSampah::create([
                 'nama_sampah' => $request->nama_sampah,
-                'status' => 1,
+                'status' => $request->status,
             ]);
 
             $hargaSampah = HargaSampah::create([
