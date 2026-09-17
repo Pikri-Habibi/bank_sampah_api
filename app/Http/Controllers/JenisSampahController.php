@@ -22,9 +22,9 @@ class JenisSampahController extends Controller
             'nama_sampah' => 'required|string|max:255',
         ]);
 
-        $sudahAda = JenisSampah::where(
-            'nama_sampah',
-            $request->nama_sampah
+        $sudahAda = JenisSampah::whereRaw(
+            'LOWER(nama_sampah) = ?',
+            [strtolower($request->nama_sampah)]
         )->exists();
 
         if ($sudahAda) {
@@ -48,16 +48,27 @@ class JenisSampahController extends Controller
         $request->validate([
             'nama_sampah' => 'required|string|max:255',
             'harga_per_kg' => 'required|numeric|min:0',
+            'status' => 'required|boolean',
         ]);
+
+        $sudahAda = JenisSampah::whereRaw(
+            'LOWER(nama_sampah) = ?',
+            [strtolower($request->nama_sampah)]
+        )->exists();
+
+        if ($sudahAda) {
+            return response()->json([
+                'message' => 'Jenis sampah sudah terdaftar.'
+            ], 422);
+        }
 
         return DB::transaction(function () use ($request) {
 
-            // Buat jenis sampah baru
             $jenisSampah = JenisSampah::create([
                 'nama_sampah' => $request->nama_sampah,
+                'status' => 1,
             ]);
 
-            // Buat harga untuk jenis sampah tersebut
             $hargaSampah = HargaSampah::create([
                 'id_jenis_sampah' => $jenisSampah->id_jenis_sampah,
                 'harga_per_kg' => $request->harga_per_kg,

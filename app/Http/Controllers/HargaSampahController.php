@@ -60,10 +60,16 @@ class HargaSampahController extends Controller
     {
         $harga = HargaSampah::findOrFail($id);
 
+        $jenisSampah = $harga->jenisSampah;
+
         $harga->delete();
 
+        if ($jenisSampah) {
+            $jenisSampah->delete();
+        }
+
         return response()->json([
-            'message' => 'Harga sampah berhasil dihapus'
+            'message' => 'Jenis sampah dan harga berhasil dihapus'
         ]);
     }
 }
