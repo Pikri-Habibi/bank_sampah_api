@@ -22,6 +22,17 @@ class JenisSampahController extends Controller
             'nama_sampah' => 'required|string|max:255',
         ]);
 
+        $sudahAda = JenisSampah::where(
+            'nama_sampah',
+            $request->nama_sampah
+        )->exists();
+
+        if ($sudahAda) {
+            return response()->json([
+                'message' => 'Jenis sampah sudah terdaftar.'
+            ], 422);
+        }
+
         $data = JenisSampah::create([
             'nama_sampah' => $request->nama_sampah,
         ]);

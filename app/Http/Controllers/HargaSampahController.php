@@ -34,11 +34,16 @@ class HargaSampahController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
+            'nama_sampah' => 'required|string|max:255',
             'harga_per_kg' => 'required|numeric|min:0',
             'status' => 'required|boolean',
         ]);
 
         $harga = HargaSampah::findOrFail($id);
+
+        $harga->jenisSampah->update([
+            'nama_sampah' => $request->nama_sampah,
+        ]);
 
         $harga->update([
             'harga_per_kg' => $request->harga_per_kg,
@@ -47,8 +52,8 @@ class HargaSampahController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Harga sampah berhasil diperbarui',
-            'data' => $harga
+            'message' => 'Data sampah berhasil diperbarui',
+            'data' => $harga->load('jenisSampah')
         ]);
     }
     public function destroy($id)
