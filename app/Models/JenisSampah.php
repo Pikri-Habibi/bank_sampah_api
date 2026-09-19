@@ -17,7 +17,11 @@ class JenisSampah extends Model
 
     public function harga()
     {
-        return $this->hasMany(HargaSampah::class, 'id_jenis_sampah', 'id_jenis_sampah');
+        return $this->hasMany(
+            HargaSampah::class,
+            'id_jenis_sampah',
+            'id_jenis_sampah'
+        );
     }
     
 }

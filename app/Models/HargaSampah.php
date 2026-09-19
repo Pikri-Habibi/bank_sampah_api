@@ -11,11 +11,11 @@ class HargaSampah extends Model
     protected $primaryKey = 'id_harga';
 
     protected $fillable = [
-        'id_jenis_sampah',
-        'id_pengguna_admin',
-        'harga_per_kg',
-        'tanggal_berlaku',
-        'status',
+    'id_jenis_sampah',
+    'id_pengguna_admin',
+    'harga_per_kg',
+    'tanggal_berlaku',
+    'status',
     ];
 
     public function jenisSampah()

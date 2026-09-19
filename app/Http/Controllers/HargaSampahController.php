@@ -33,13 +33,13 @@ class HargaSampahController extends Controller
     }
     public function update(Request $request, $id)
     {
+        $harga = HargaSampah::findOrFail($id);
+
         $request->validate([
-            'nama_sampah' => 'required|string|max:255',
+            'nama_sampah' => 'required|string|max:255|unique:jenis_sampah,nama_sampah,' . $harga->id_jenis_sampah . ',id_jenis_sampah',
             'harga_per_kg' => 'required|numeric|min:0',
             'status' => 'required|boolean',
         ]);
-
-        $harga = HargaSampah::findOrFail($id);
 
         $harga->jenisSampah->update([
             'nama_sampah' => $request->nama_sampah,
@@ -60,10 +60,16 @@ class HargaSampahController extends Controller
     {
         $harga = HargaSampah::findOrFail($id);
 
+        $jenisSampah = $harga->jenisSampah;
+
         $harga->delete();
 
+        if ($jenisSampah) {
+            $jenisSampah->delete();
+        }
+
         return response()->json([
-            'message' => 'Harga sampah berhasil dihapus'
+            'message' => 'Jenis sampah dan harga berhasil dihapus'
         ]);
     }
 }

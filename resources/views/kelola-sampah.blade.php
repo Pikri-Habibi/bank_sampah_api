@@ -1094,15 +1094,19 @@
 
 
             document.getElementById('modalTitle').textContent =
-                'Edit Harga Sampah';
+                'Edit Sampah';
 
 
             document.getElementById('editId').value =
-                item.id_harga;
+                item.id_jenis_sampah;
 
+
+            const jenis = jenisSampahData.find(
+                j => j.id_jenis_sampah == item.id_jenis_sampah
+            );
 
             document.getElementById('jenisSampah').value =
-                item.id_jenis_sampah;
+                jenis?.nama_sampah ?? '';
 
 
             document.getElementById('harga').value =
@@ -1136,6 +1140,9 @@
 
             const harga =
                 document.getElementById('harga').value;
+            
+            const status =
+                document.getElementById('status').value;
 
             if (!namaSampah || !harga) {
                 alert('Jenis sampah dan harga wajib diisi.');
@@ -1144,7 +1151,8 @@
 
             const data = {
                 nama_sampah: namaSampah,
-                harga_per_kg: harga
+                harga_per_kg: harga,
+                status: status
             };
 
             try {
@@ -1155,7 +1163,7 @@
 
                     // EDIT HARGA
                     response = await fetch(
-                        `/api/harga-sampah/${id}`,
+                        `/api/jenis-sampah/${id}`,
                         {
                             method: 'PUT',
                             headers: {
@@ -1163,7 +1171,9 @@
                                 'Accept': 'application/json'
                             },
                             body: JSON.stringify({
-                                harga_per_kg: harga
+                                nama_sampah: namaSampah,
+                                harga_per_kg: harga,
+                                status: status
                             })
                         }
                     );
@@ -1200,7 +1210,7 @@
 
                 alert(
                     id
-                        ? 'Harga berhasil diperbarui.'
+                        ? 'Sampah berhasil diperbarui.'
                         : 'Jenis sampah dan harga berhasil ditambahkan.'
                 );
 
@@ -1265,7 +1275,7 @@
 
 
                 alert(
-                    'Harga sampah berhasil dihapus.'
+                    'Sampah berhasil dihapus.'
                 );
 
 
