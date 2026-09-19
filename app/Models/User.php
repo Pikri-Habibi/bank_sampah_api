@@ -29,4 +29,32 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // ==========================================
+    // RELASI UNTUK FITUR MULTI-ROLE (LOGIC LOGIN)
+    // ==========================================
+
+    /**
+     * Relasi ke profil Admin
+     */
+    public function admin()
+    {
+        return $this->hasOne(Admin::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke profil Petugas
+     */
+    public function petugas()
+    {
+        return $this->hasOne(Petugas::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke profil Nasabah
+     */
+    public function nasabah()
+    {
+        return $this->hasOne(Nasabah::class, 'user_id');
+    }
 }
