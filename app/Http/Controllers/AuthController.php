@@ -4,12 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 class AuthController extends Controller
 {
     // Menampilkan halaman form login
     public function showLoginForm()
     {
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return redirect()->route('dashboard.admin');
+            }
+
+            if ($user->role === 'petugas') {
+                return redirect()->route('petugas.dashboard');
+            }
+
+            if ($user->role === 'nasabah') {
+                return redirect()->route('nasabah.dashboard');
+            }
+        }
+
         return view('auth.login');
     }
 
@@ -23,18 +40,19 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            $request->session()->forget('url.intended');
 
             $user = Auth::user();
 
-            if ($user->role === 'admin' || $user->admin) {
+            if ($user->role === 'admin') {
                 return redirect()->route('dashboard.admin');
             }
 
-            if ($user->role === 'petugas' || $user->petugas) {
+            if ($user->role === 'petugas') {
                 return redirect()->route('petugas.dashboard');
             }
 
-            if ($user->role === 'nasabah' || $user->nasabah) {
+            if ($user->role === 'nasabah') {
                 return redirect()->route('nasabah.dashboard');
             }
 
@@ -54,6 +72,10 @@ class AuthController extends Controller
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+        $request->session()->flush();
+        $request->session()->forget('url.intended');
+
+        Cookie::queue(Cookie::forget(config('session.cookie')));
 
         return redirect()->route('login');
     }
