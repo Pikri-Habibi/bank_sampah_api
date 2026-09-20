@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 // Redirect dari URL utama (/) ke halaman login
 Route::get('/', function () {
@@ -18,14 +19,14 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Admin Dashboard -> resources/views/layouts/dashboard-admin.blade.php
+    // Admin Dashboard
     Route::get('/admin/dashboard', function () {
-        return view('dashboard-admin');
+        return view('admin.dashboard-admin');
     })->name('dashboard.admin');
 
-    // Kelola Sampah -> resources/views/layouts/kelola-sampah.blade.php
+    // Kelola Sampah
     Route::get('/kelola-sampah', function () {
-        return view('layouts.kelola-sampah');
+        return view('admin.kelola-sampah');
     })->name('kelola.sampah');
 
     // Dashboard Petugas
@@ -37,4 +38,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/nasabah/dashboard', function () {
         return "Selamat Datang Nasabah!";
     })->name('nasabah.dashboard');
+});
+
+// Manajemen Pengguna (CRUD) dengan URL /admin/kelola-pengguna
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/kelola-pengguna', [UserController::class, 'index'])->name('admin.users.index');
+    Route::post('/admin/kelola-pengguna', [UserController::class, 'store'])->name('admin.users.store');
+    Route::put('/admin/kelola-pengguna/{id}', [UserController::class, 'update'])->name('admin.users.update');
+    Route::delete('/admin/kelola-pengguna/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
+
+
 });

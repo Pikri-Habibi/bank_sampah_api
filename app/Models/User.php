@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -10,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'role', 'status'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -31,7 +30,7 @@ class User extends Authenticatable
     }
 
     // ==========================================
-    // RELASI UNTUK FITUR MULTI-ROLE (LOGIC LOGIN)
+    // RELASI UNTUK FITUR MULTI-ROLE
     // ==========================================
 
     /**
@@ -56,5 +55,10 @@ class User extends Authenticatable
     public function nasabah()
     {
         return $this->hasOne(Nasabah::class, 'user_id');
+    }
+
+    public function isProtected(): bool
+    {
+        return strtolower((string) $this->email) === 'admin@banksampah.com';
     }
 }

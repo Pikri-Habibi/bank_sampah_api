@@ -26,16 +26,18 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-            // Cek role dan redirect secara tegas sesuai peran user
-            if ($user->admin) {
+            if ($user->role === 'admin' || $user->admin) {
                 return redirect()->route('dashboard.admin');
-            } elseif ($user->petugas) {
+            }
+
+            if ($user->role === 'petugas' || $user->petugas) {
                 return redirect()->route('petugas.dashboard');
-            } elseif ($user->nasabah) {
+            }
+
+            if ($user->role === 'nasabah' || $user->nasabah) {
                 return redirect()->route('nasabah.dashboard');
             }
 
-            // Fallback jika user tidak punya relasi role apapun
             Auth::logout();
             return back()->withErrors(['email' => 'Akun tidak memiliki hak akses role.']);
         }

@@ -1140,7 +1140,7 @@
 
             const harga =
                 document.getElementById('harga').value;
-            
+
             const status =
                 document.getElementById('status').value;
 
