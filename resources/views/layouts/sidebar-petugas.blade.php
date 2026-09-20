@@ -30,7 +30,7 @@
         </a>
 
         <a
-            href="/setor-sampah"
+            href="{{ route('petugas.setoran.create') }}"
             class="active"
         >
             <span class="menu-icon">♻</span>
