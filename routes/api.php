@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\JenisSampahController; 
-use App\Http\Controllers\HargaSampahController;
+
+use App\Http\Controllers\Admin\JenisSampahController;
+use App\Http\Controllers\Admin\HargaSampahController;
+
 
 Route::get('/jenis-sampah', [JenisSampahController::class, 'index']);
 
@@ -13,6 +15,7 @@ Route::put('/jenis-sampah/{id}', [JenisSampahController::class, 'update']);
 Route::delete('/jenis-sampah/{id}', [JenisSampahController::class, 'destroy']);
 
 Route::post('/jenis-sampah-dengan-harga', [JenisSampahController::class, 'storeWithHarga']);
+
 
 Route::post('/harga-sampah', [HargaSampahController::class, 'store']);
 

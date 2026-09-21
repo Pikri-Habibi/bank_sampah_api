@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Petugas;
 
+use App\Http\Controllers\Controller;
 use App\Models\Penarikan;
 use App\Models\Nasabah;
 use Illuminate\Http\Request;

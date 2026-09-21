@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Petugas;
 
+use App\Http\Controllers\Controller;
 use App\Models\DetailSetoran;
 use App\Models\HargaSampah;
 use App\Models\JenisSampah;

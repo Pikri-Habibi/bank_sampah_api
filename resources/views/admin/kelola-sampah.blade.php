@@ -6,6 +6,8 @@
 
     <title>Kelola Sampah - Bank Sampah Griya Ayu</title>
 
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
         * {
             margin: 0;
@@ -231,9 +233,22 @@
         .search-icon {
             position: absolute;
             left: 14px;
-            top: 11px;
+            top: 50%;
+            transform: translateY(-50%);
 
-            color: #94a29e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: #8aa09b;
+
+            pointer-events: none;
+        }
+
+        .search-icon svg {
+            width: 17px;
+            height: 17px;
+            stroke-width: 2;
         }
 
         .status-filter {
@@ -335,18 +350,76 @@
             gap: 8px;
         }
 
+        /* =========================
+        AKSI TABEL
+        ========================= */
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .btn-action {
-            width: 25px;
-            height: 25px;
+            width: 30px;
+            height: 30px;
 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 0;
             border: none;
-
             border-radius: 6px;
 
+            background: transparent;
             cursor: pointer;
 
-            font-size: 13px;
+            transition: all 0.15s ease;
         }
+
+        .btn-action svg {
+            width: 10px;
+            height: 10px;
+            stroke-width: 2;
+        }
+
+        .btn-edit {
+            color: #287d65;
+        }
+
+        .btn-delete {
+            color: #ef4444;
+        }
+
+        /* Hover */
+        .btn-edit:hover {
+            background: #edf7f3;
+            color: #1f6b57;
+        }
+
+        .btn-delete:hover {
+            background: #fef0f0;
+            color: #dc2626;
+        }
+
+    .btn-action svg {
+        width: 19px;
+        height: 19px;
+        stroke-width: 2;
+    }
+
+    .btn-action:hover {
+        transform: scale(1.12);
+    }
+
+    .btn-edit:hover {
+        color: #1f624f;
+    }
+
+    .btn-delete:hover {
+        color: #dc2626;
+    }
 
         .btn-edit {
             background: #eaf5ef;
@@ -541,6 +614,84 @@
                 min-width: 750px;
             }
         }
+
+        /* =========================================
+        ELEGANT TABLE ACTIONS
+        ========================================= */
+
+        .actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 6px;
+        }
+
+        .actions .btn-action {
+            appearance: none !important;
+            -webkit-appearance: none !important;
+
+            width: 28px !important;
+            height: 28px !important;
+
+            padding: 0 !important;
+            margin: 0 !important;
+
+            border: none !important;
+            border-radius: 7px !important;
+
+            background: transparent !important;
+
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+
+            cursor: pointer;
+            box-shadow: none !important;
+
+            transition:
+                background-color 0.15s ease,
+                color 0.15s ease,
+                transform 0.15s ease;
+        }
+
+        .actions .btn-action svg {
+            width: 16px !important;
+            height: 16px !important;
+
+            stroke-width: 2 !important;
+        }
+
+        /* EDIT */
+
+        .actions .btn-edit {
+            color: #287d65 !important;
+        }
+
+        .actions .btn-edit:hover {
+            background: #edf7f3 !important;
+            color: #17634f !important;
+        }
+
+        /* DELETE */
+
+        .actions .btn-delete {
+            color: #e05252 !important;
+        }
+
+        .actions .btn-delete:hover {
+            background: #fff1f1 !important;
+            color: #c93636 !important;
+        }
+
+        /* Sedikit feedback saat diklik */
+
+        .actions .btn-action:active {
+            transform: scale(0.92);
+        }
+
+        /* =========================================
+        SEARCH ICON
+        ========================================= */
     </style>
 </head>
 
@@ -584,7 +735,7 @@
             <div class="search-box">
 
                 <span class="search-icon">
-                    🔍
+                    <i data-lucide="search"></i>
                 </span>
 
                 <input
@@ -961,7 +1112,7 @@
                                     onclick="editData(${item.id_harga})"
                                     title="Edit"
                                 >
-                                    ✎
+                                    <i data-lucide="pencil"></i>
                                 </button>
 
                                 <button
@@ -969,7 +1120,7 @@
                                     onclick="deleteData(${item.id_harga})"
                                     title="Hapus"
                                 >
-                                    🗑
+                                    <i data-lucide="trash-2"></i>
                                 </button>
 
                             </div>
@@ -982,6 +1133,7 @@
 
             });
 
+            lucide.createIcons();
 
             document.getElementById('tableInfo').textContent =
                 `Menampilkan 1 - ${data.length} dari ${data.length} data`;
@@ -1310,7 +1462,7 @@
 
 
         init();
-
+        lucide.createIcons();
     </script>
 
 </body>

@@ -2,13 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\NasabahDashboardController;
-use App\Http\Controllers\PetugasDashboardController;
-use App\Http\Controllers\PetugasSetoranController;
-use App\Http\Controllers\PenarikanController;
-use App\Http\Controllers\PetugasPenarikanController;
+use App\Http\Controllers\Auth\AuthController;
+
+use App\Http\Controllers\Admin\UserController;
+
+use App\Http\Controllers\Nasabah\NasabahDashboardController;
+use App\Http\Controllers\Nasabah\PenarikanController;
+
+use App\Http\Controllers\Petugas\PetugasDashboardController;
+use App\Http\Controllers\Petugas\PetugasPenarikanController;
+use App\Http\Controllers\Petugas\PetugasSetoranController;
 
 
 // ======================================================

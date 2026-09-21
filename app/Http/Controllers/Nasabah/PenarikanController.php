@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Nasabah;
 
+use App\Http\Controllers\Controller;
 use App\Models\Penarikan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
