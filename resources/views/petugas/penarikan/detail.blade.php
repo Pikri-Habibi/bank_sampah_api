@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
     <title>Detail Penarikan</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f7fb; margin: 0; padding: 24px; }
@@ -34,8 +38,8 @@
         @endif
 
         <div class="row">
-            <span class="label">Kode Penarikan</span>
-            <strong>{{ $penarikan->kode_penarikan }}</strong>
+            <span class="label">Kode Verifikasi</span>
+            <strong>{{ $penarikan->kode_verifikasi }}</strong>
         </div>
         <div class="row">
             <span class="label">Nama Nasabah</span>
@@ -64,11 +68,24 @@
 
         @if(($penarikan->status ?? 'pending') === 'pending')
             <div style="margin-top: 20px; display:flex; gap:10px; flex-wrap:wrap;">
-                <form action="{{ route('petugas.penarikan.approve', $penarikan->id_penarikan) }}" method="POST">
+                <form action="{{ route('petugas.penarikan.verify', $penarikan->id_penarikan) }}" method="POST">
                     @csrf
-                    <button type="submit" class="btn">Setujui Penarikan</button>
+
+                    <input
+                        type="hidden"
+                        name="kode_verifikasi"
+                        value="{{ $penarikan->kode_verifikasi }}"
+                    >
+
+                    <button type="submit" class="btn">
+                        Verifikasi Penarikan
+                    </button>
                 </form>
-                <a href="{{ route('petugas.dashboard') }}" class="btn btn-secondary">Kembali</a>
+
+                <a href="{{ route('petugas.penarikan.index') }}" class="btn btn-secondary">
+                    Kembali
+                </a>
+
             </div>
         @else
             <div style="margin-top: 20px;">

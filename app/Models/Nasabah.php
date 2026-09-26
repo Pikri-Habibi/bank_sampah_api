@@ -28,4 +28,13 @@ class Nasabah extends Model
     {
         return $this->hasMany(Setoran::class, 'id_pengguna_nasabah');
     }
+
+    public function notifikasi()
+    {
+        return $this->hasMany(
+            Notifikasi::class,
+            'id_pengguna_nasabah',
+            'id_pengguna_nasabah'
+        );
+    }
 }

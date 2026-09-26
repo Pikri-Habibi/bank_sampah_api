@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
     <title>Dashboard Petugas</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f7fb; margin: 0; padding: 24px; }
@@ -47,15 +51,54 @@
         @endif
 
         <div class="box">
+
             <h3>Validasi Penarikan Nasabah</h3>
-            <form action="{{ route('petugas.penarikan.search') }}" method="POST" style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;">
+
+            <p style="color:#6b7280; margin-bottom:16px;">
+                Masukkan kode verifikasi yang diberikan oleh nasabah
+                untuk memproses penarikan saldo.
+            </p>
+
+            <form
+                action="{{ route('petugas.penarikan.search') }}"
+                method="POST"
+                style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;"
+            >
+
                 @csrf
+
                 <div style="flex:1; min-width:220px;">
-                    <label for="kode" style="display:block; margin-bottom:8px; font-weight:bold;">Kode Penarikan</label>
-                    <input type="text" id="kode" name="kode" placeholder="Contoh: WD-20260920-00001-123" style="width:100%; padding:10px; border:1px solid #d1d5db; border-radius:8px;" required>
+
+                    <label
+                        for="kode"
+                        style="display:block; margin-bottom:8px; font-weight:bold;"
+                    >
+                        Kode Verifikasi
+                    </label>
+
+                    <input
+                        type="text"
+                        id="kode"
+                        name="kode"
+                        placeholder="Contoh: 583214"
+                        maxlength="6"
+                        inputmode="numeric"
+                        style="width:100%; padding:10px; border:1px solid #d1d5db; border-radius:8px;"
+                        required
+                    >
+
                 </div>
-                <button type="submit" class="btn" style="border:none; cursor:pointer;">Cari Kode</button>
+
+                <button
+                    type="submit"
+                    class="btn"
+                    style="border:none; cursor:pointer;"
+                >
+                    Verifikasi
+                </button>
+
             </form>
+
         </div>
 
         <div class="cards">

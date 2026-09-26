@@ -10,24 +10,21 @@ use App\Models\Nasabah;
 use App\Models\Setoran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Notifikasi;
+
 
 class PetugasSetoranController extends Controller
 {
     protected function getActiveHarga($idJenisSampah)
     {
         return HargaSampah::where('id_jenis_sampah', $idJenisSampah)
-            ->where(function ($query) {
-                $query->where('status', true)
-                    ->orWhere('status', 1)
-                    ->orWhere('status', 'aktif')
-                    ->orWhere('status', 'active');
-            })
+            ->where('status', 1)
             ->latest('tanggal_berlaku')
             ->first();
     }
 
     public function create()
-    {
+{
         $user = auth()->user();
 
         if (!$user || $user->role !== 'petugas') {
@@ -35,23 +32,18 @@ class PetugasSetoranController extends Controller
         }
 
         $nasabahList = Nasabah::with('user')->get();
+
         $jenisSampah = JenisSampah::with(['harga' => function ($query) {
-                $query->where(function ($subQuery) {
-                    $subQuery->where('status', true)
-                        ->orWhere('status', 1)
-                        ->orWhere('status', 'aktif')
-                        ->orWhere('status', 'active');
-                })->latest('tanggal_berlaku');
-            }])
-            ->where(function ($query) {
-                $query->where('status', true)
-                    ->orWhere('status', 1)
-                    ->orWhere('status', 'aktif')
-                    ->orWhere('status', 'active');
-            })
+            $query->where('status', 1)
+                ->latest('tanggal_berlaku');
+        }])
+            ->where('status', 1)
             ->get();
 
-        return view('petugas.setoran.create', compact('nasabahList', 'jenisSampah'));
+        return view(
+            'petugas.setoran.create',
+            compact('nasabahList', 'jenisSampah')
+        );
     }
 
     public function preview(Request $request)
@@ -75,7 +67,7 @@ class PetugasSetoranController extends Controller
     }
 
     public function store(Request $request)
-{
+    {
     $user = auth()->user();
 
     if (!$user || $user->role !== 'petugas') {
@@ -124,6 +116,24 @@ class PetugasSetoranController extends Controller
         */
 
         foreach ($request->items as $detail) {
+
+            $jenisSampah = JenisSampah::where(
+                'id_jenis_sampah',
+                $detail['id_jenis_sampah']
+            )
+                ->where(function ($query) {
+                    $query->where('status', true)
+                        ->orWhere('status', 1)
+                        ->orWhere('status', 'aktif')
+                        ->orWhere('status', 'active');
+                })
+                ->first();
+
+            if (!$jenisSampah) {
+                throw new \Exception(
+                    'Jenis sampah tidak aktif atau tidak ditemukan.'
+                );
+            }
 
             $harga = $this->getActiveHarga(
                 $detail['id_jenis_sampah']
@@ -175,6 +185,15 @@ class PetugasSetoranController extends Controller
             (float) ($nasabah->saldo ?? 0) + $totalSaldo;
 
         $nasabah->save();
+
+        Notifikasi::create([
+            'id_pengguna_nasabah' => $nasabah->id_pengguna_nasabah,
+            'judul' => 'Setoran Berhasil',
+            'pesan' => 'Setoran sampah berhasil dicatat. Saldo bertambah sebesar Rp ' .
+                number_format($totalSaldo, 0, ',', '.'),
+            'tipe' => 'setoran',
+            'dibaca' => false,
+        ]);
     });
 
     return redirect()

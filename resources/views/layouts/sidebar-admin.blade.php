@@ -19,7 +19,7 @@
     }
 
     .brand-icon {
-        font-size: 34px;
+        font-size: 30px;
         line-height: 1;
     }
 
@@ -115,13 +115,32 @@
         text-decoration: none;
         font-size: 13px;
     }
+    .logout-admin {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        background: none;
+        border: none;
+        padding: 0;
+
+        cursor: pointer;
+        font-family: inherit;
+
+        color: #d8ebe6;
+        font-size: 12px;
+    }
+
+    .logout-admin:hover {
+        color: rgb(235, 0, 0);
+    }
 </style>
 
 <!-- HTML Sidebar -->
 <aside class="sidebar">
     <div class="brand">
         <div class="brand-icon">
-            ♻
+            <i class="fa-solid fa-building-columns"></i>
         </div>
         <div class="brand-name">
             Bank Sampah<br>
@@ -171,12 +190,37 @@
             </div>
         </div>
 
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
+            <form
+                action="{{ route('logout') }}"
+                method="POST"
+            >
 
-        <a href="#" class="logout" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            ⇥ Keluar
+                @csrf
+
+                <button
+                    type="submit"
+                    class="logout-admin"
+                    style="
+                        background: none;
+                        border: none;
+                        padding: 0;
+                        cursor: pointer;
+                        font-family: inherit;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    "
+                >
+
+                    <i class="fa-solid fa-right-from-bracket"></i>
+
+                    <span>
+                        Keluar
+                    </span>
+
+                </button>
+
+            </form>
         </a>
     </div>
 </aside>

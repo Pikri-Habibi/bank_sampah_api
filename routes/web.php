@@ -12,6 +12,7 @@ use App\Http\Controllers\Nasabah\PenarikanController;
 use App\Http\Controllers\Petugas\PetugasDashboardController;
 use App\Http\Controllers\Petugas\PetugasPenarikanController;
 use App\Http\Controllers\Petugas\PetugasSetoranController;
+use App\Http\Controllers\Nasabah\HargaSampahController;
 
 
 // ======================================================
@@ -118,12 +119,19 @@ Route::middleware('auth')->group(function () {
         ->name('petugas.setoran.preview');
 
 
-    // Penarikan oleh petugas
+    // --------------------------------------------------
+    // PENARIKAN SALDO
+    // --------------------------------------------------
+
+    Route::get('/petugas/penarikan', [PetugasPenarikanController::class, 'index'])
+        ->name('petugas.penarikan.index');
+
     Route::match(['GET', 'POST'], '/petugas/penarikan/search', [PetugasPenarikanController::class, 'search'])
         ->name('petugas.penarikan.search');
 
-    Route::post('/petugas/penarikan/{id}/approve', [PetugasPenarikanController::class, 'approve'])
-        ->name('petugas.penarikan.approve');
+    Route::post('/petugas/penarikan/{id}/verify', [PetugasPenarikanController::class, 'verify'])
+        ->name('petugas.penarikan.verify');
+
 
 
     // --------------------------------------------------
@@ -133,11 +141,36 @@ Route::middleware('auth')->group(function () {
     Route::get('/nasabah/dashboard', [NasabahDashboardController::class, 'index'])
         ->name('nasabah.dashboard');
 
+    Route::get('/nasabah/harga-sampah', [HargaSampahController::class, 'index'])
+        ->name('nasabah.harga-sampah');
 
     Route::get('/nasabah/penarikan', [PenarikanController::class, 'create'])
         ->name('nasabah.penarikan.create');
 
+    Route::get('/nasabah/penarikan/riwayat', [PenarikanController::class, 'riwayat'])
+        ->name('nasabah.penarikan.riwayat');
+
     Route::post('/nasabah/penarikan', [PenarikanController::class, 'store'])
         ->name('nasabah.penarikan.store');
 
+    Route::get('/nasabah/riwayat', [NasabahDashboardController::class, 'riwayat'])
+        ->name('nasabah.riwayat');
+
+    Route::get('/nasabah/riwayat/{id}', [NasabahDashboardController::class, 'detail'])
+        ->name('nasabah.riwayat.detail');
+
+    Route::get('/nasabah/penarikan/{id}/edit', [PenarikanController::class, 'edit'])
+        ->name('nasabah.penarikan.edit');
+
+    Route::put('/nasabah/penarikan/{id}', [PenarikanController::class, 'update'])
+        ->name('nasabah.penarikan.update');
+
+    Route::delete('/nasabah/penarikan/{id}', [PenarikanController::class, 'destroy'])
+        ->name('nasabah.penarikan.destroy');
+
+    Route::get('/nasabah/profil', [NasabahDashboardController::class, 'profil'])
+        ->name('nasabah.profil');
+
+    Route::post('/nasabah/notifikasi/baca', [NasabahDashboardController::class, 'bacaNotifikasi'])
+        ->name('nasabah.notifikasi.baca');
 });

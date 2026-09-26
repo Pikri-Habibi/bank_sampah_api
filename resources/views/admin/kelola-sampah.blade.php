@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
 
     <title>Kelola Sampah - Bank Sampah Griya Ayu</title>
 
@@ -690,6 +694,142 @@
         }
 
         /* =========================================
+        CUSTOM POPUP
+        ========================================= */
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 40, 35, 0.45);
+            backdrop-filter: blur(3px);
+
+            align-items: center;
+            justify-content: center;
+
+            z-index: 9999;
+        }
+
+        .popup-overlay.show {
+            display: flex;
+        }
+
+        .popup-box {
+            width: 380px;
+            max-width: calc(100% - 40px);
+
+            background: white;
+            border-radius: 16px;
+
+            padding: 26px;
+
+            text-align: center;
+
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+
+            animation: popupShow 0.2s ease;
+        }
+
+        @keyframes popupShow {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .popup-icon {
+            width: 52px;
+            height: 52px;
+
+            margin: 0 auto 15px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .popup-icon.success {
+            background: #e8f7ef;
+            color: #287d65;
+        }
+
+        .popup-icon.error {
+            background: #ffebeb;
+            color: #d93636;
+        }
+
+        .popup-icon.warning {
+            background: #fff4df;
+            color: #d88916;
+        }
+
+        .popup-title {
+            margin-bottom: 8px;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            color: #17332e;
+        }
+
+        .popup-message {
+            margin-bottom: 22px;
+
+            color: #71847f;
+
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .popup-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 9px;
+        }
+
+        .popup-button {
+            min-width: 90px;
+
+            padding: 10px 16px;
+
+            border: none;
+            border-radius: 8px;
+
+            font-size: 13px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .popup-button.primary {
+            background: #2d765d;
+            color: white;
+        }
+
+        .popup-button.primary:hover {
+            background: #245f4f;
+        }
+
+        .popup-button.cancel {
+            background: #f1f4f3;
+            color: #566560;
+        }
+
+        .popup-button.cancel:hover {
+            background: #e5eae8;
+        }
+
+        /* =========================================
         SEARCH ICON
         ========================================= */
     </style>
@@ -842,89 +982,147 @@
          MODAL TAMBAH / EDIT
     ========================= -->
 
-    <div class="modal" id="modal">
+    <!-- =========================
+        MODAL TAMBAH / EDIT
+    ========================= -->
 
-        <div class="modal-content">
+        <div class="modal" id="modal">
 
-            <h2 id="modalTitle">
-                Tambah Harga Sampah
-            </h2>
+            <div class="modal-content">
 
-            <input
-                type="hidden"
-                id="editId"
-            >
-
-            <div class="form-group">
-
-                <label>Jenis Sampah</label>
+                <h2 id="modalTitle">
+                    Tambah Harga Sampah
+                </h2>
 
                 <input
-                    type="text"
-                    id="jenisSampah"
-                    placeholder="Contoh: Botol Kaca"
+                    type="hidden"
+                    id="editId"
                 >
 
-            </div>
+                <div class="form-group">
+
+                    <label>Jenis Sampah</label>
+
+                    <input
+                        type="text"
+                        id="jenisSampah"
+                        placeholder="Contoh: Botol Kaca"
+                    >
+
+                </div>
 
 
-            <div class="form-group">
+                <div class="form-group">
 
-                <label>
-                    Harga per Kg
-                </label>
+                    <label>
+                        Harga per Kg
+                    </label>
 
-                <input
-                    type="number"
-                    id="harga"
-                    placeholder="Contoh: 2000"
-                >
+                    <input
+                        type="number"
+                        id="harga"
+                        placeholder="Contoh: 2000"
+                    >
 
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Status
-                </label>
-
-                <select id="status">
-
-                    <option value="1">
-                        Aktif
-                    </option>
-
-                    <option value="0">
-                        Nonaktif
-                    </option>
-
-                </select>
-
-            </div>
+                </div>
 
 
-            <div class="modal-buttons">
+                <div class="form-group">
 
-                <button
-                    class="btn-cancel"
-                    onclick="closeModal()"
-                >
-                    Batal
-                </button>
+                    <label>
+                        Status
+                    </label>
 
-                <button
-                    class="btn-save"
-                    onclick="saveData()"
-                >
-                    Simpan
-                </button>
+                    <select id="status">
+
+                        <option value="1">
+                            Aktif
+                        </option>
+
+                        <option value="0">
+                            Nonaktif
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="modal-buttons">
+
+                    <button
+                        class="btn-cancel"
+                        onclick="closeModal()"
+                    >
+                        Batal
+                    </button>
+
+                    <button
+                        class="btn-save"
+                        onclick="saveData()"
+                    >
+                        Simpan
+                    </button>
+
+                </div>
 
             </div>
 
         </div>
 
-    </div>
+
+        <!-- =========================
+            CUSTOM POPUP
+        ========================= -->
+
+        <div class="popup-overlay" id="popupOverlay">
+
+            <div class="popup-box">
+
+                <div
+                    class="popup-icon"
+                    id="popupIcon"
+                >
+                    ✓
+                </div>
+
+                <div
+                    class="popup-title"
+                    id="popupTitle"
+                >
+                    Berhasil
+                </div>
+
+                <div
+                    class="popup-message"
+                    id="popupMessage"
+                >
+                    Data berhasil disimpan.
+                </div>
+
+                <div class="popup-buttons">
+
+                    <button
+                        class="popup-button cancel"
+                        id="popupCancel"
+                        onclick="closePopup()"
+                    >
+                        Batal
+                    </button>
+
+                    <button
+                        class="popup-button primary"
+                        id="popupConfirm"
+                        onclick="popupConfirmAction()"
+                    >
+                        OK
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
 
     <!-- =========================
@@ -1297,7 +1495,11 @@
                 document.getElementById('status').value;
 
             if (!namaSampah || !harga) {
-                alert('Jenis sampah dan harga wajib diisi.');
+                showPopup(
+                    'warning',
+                    'Data Belum Lengkap',
+                    'Jenis sampah dan harga wajib diisi.'
+                );
                 return;
             }
 
@@ -1352,17 +1554,25 @@
 
                     console.error(error);
 
-                    alert(
-                        error.message ??
-                        'Gagal menyimpan data.'
+                    const pesanError =
+                        error.errors
+                            ? Object.values(error.errors).flat()[0]
+                            : error.message ?? 'Gagal menyimpan data.';
+
+                    showPopup(
+                        'error',
+                        'Gagal Menyimpan',
+                        pesanError
                     );
 
                     return;
                 }
 
-                alert(
+                showPopup(
+                    'success',
+                    id ? 'Berhasil Diperbarui' : 'Berhasil Ditambahkan',
                     id
-                        ? 'Sampah berhasil diperbarui.'
+                        ? 'Data sampah berhasil diperbarui.'
                         : 'Jenis sampah dan harga berhasil ditambahkan.'
                 );
 
@@ -1390,15 +1600,19 @@
 
         async function deleteData(id) {
 
-            const yakin = confirm(
-                'Yakin ingin menghapus harga sampah ini?'
+            showPopup(
+                'warning',
+                'Hapus Data?',
+                'Yakin ingin menghapus harga sampah ini? Data harga yang dihapus tidak dapat digunakan untuk perhitungan setoran berikutnya.',
+                true,
+                () => {
+                    prosesHapus(id);
+                }
             );
 
+        }
 
-            if (!yakin) {
-                return;
-            }
-
+        async function prosesHapus(id) {
 
             try {
 
@@ -1408,28 +1622,27 @@
                         method: 'DELETE',
 
                         headers: {
-                            'Accept':
-                                'application/json'
+                            'Accept': 'application/json'
                         }
                     }
                 );
 
-
                 if (!response.ok) {
 
-                    alert(
-                        'Gagal menghapus data.'
+                    showPopup(
+                        'error',
+                        'Gagal Menghapus',
+                        'Data sampah gagal dihapus.'
                     );
 
                     return;
-
                 }
 
-
-                alert(
-                    'Sampah berhasil dihapus.'
+                showPopup(
+                    'success',
+                    'Berhasil Dihapus',
+                    'Data sampah berhasil dihapus.'
                 );
-
 
                 await loadHarga();
 
@@ -1437,14 +1650,15 @@
 
                 console.error(error);
 
-                alert(
+                showPopup(
+                    'error',
+                    'Terjadi Kesalahan',
                     'Terjadi kesalahan saat menghapus data.'
                 );
 
             }
 
         }
-
 
         /*
         ==========================================
@@ -1458,6 +1672,69 @@
 
             await loadHarga();
 
+        }
+
+        let popupAction = null;
+
+        function showPopup(
+            type,
+            title,
+            message,
+            showCancel = false,
+            action = null
+        ) {
+            const overlay = document.getElementById('popupOverlay');
+            const icon = document.getElementById('popupIcon');
+            const popupTitle = document.getElementById('popupTitle');
+            const popupMessage = document.getElementById('popupMessage');
+            const cancelButton = document.getElementById('popupCancel');
+            const confirmButton = document.getElementById('popupConfirm');
+
+            popupTitle.textContent = title;
+            popupMessage.textContent = message;
+
+            popupAction = action;
+
+            icon.className = `popup-icon ${type}`;
+
+            if (type === 'success') {
+                icon.textContent = '✓';
+            } else if (type === 'error') {
+                icon.textContent = '!';
+            } else if (type === 'warning') {
+                icon.textContent = '!';
+            }
+
+            cancelButton.style.display =
+                showCancel ? 'inline-block' : 'none';
+
+            confirmButton.textContent =
+                showCancel ? 'Ya, Lanjutkan' : 'OK';
+
+            overlay.classList.add('show');
+        }
+
+        function closePopup() {
+            document
+                .getElementById('popupOverlay')
+                .classList.remove('show');
+
+            popupAction = null;
+        }
+
+        function popupConfirmAction() {
+
+            if (popupAction) {
+                const action = popupAction;
+
+                closePopup();
+
+                action();
+
+                return;
+            }
+
+            closePopup();
         }
 
 

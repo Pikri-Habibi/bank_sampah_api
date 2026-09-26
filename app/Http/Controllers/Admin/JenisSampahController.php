@@ -19,9 +19,21 @@ class JenisSampahController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nama_sampah' => 'required|string|max:255|unique:jenis_sampah,nama_sampah',
-        ]);
+        $request->validate(
+            [
+                'nama_sampah' => 'required|string|max:255',
+                'harga_per_kg' => 'required|numeric|max:999999',
+                'status' => 'required|boolean',
+            ],
+            [
+                'nama_sampah.required' => 'Nama sampah wajib diisi.',
+                'harga_per_kg.required' => 'Harga per kg wajib diisi.',
+                'harga_per_kg.numeric' => 'Harga per kg harus berupa angka.',
+                'harga_per_kg.max' => 'Harga per kg tidak boleh lebih dari Rp 999.999.',
+                'status.required' => 'Status wajib dipilih.',
+                'status.boolean' => 'Status harus berupa Aktif atau Nonaktif.',
+            ]
+        );
 
         $data = JenisSampah::create([
             'nama_sampah' => $request->nama_sampah,
@@ -34,11 +46,23 @@ class JenisSampahController extends Controller
     }
     public function storeWithHarga(Request $request)
     {
-        $request->validate([
-            'nama_sampah' => 'required|string|max:255',
-            'harga_per_kg' => 'required|numeric|min:0',
-            'status' => 'required|boolean',
-        ]);
+        $request->validate(
+            [
+                'nama_sampah' => 'required|string|max:255|regex:/^[A-Za-z0-9_() ]+$/',
+                'harga_per_kg' => 'required|numeric|min:1|max:999999',
+                'status' => 'required|boolean',
+            ],
+            [
+                'nama_sampah.required' => 'Nama sampah wajib diisi.',
+                'nama_sampah.regex' => 'Nama sampah hanya boleh berisi huruf, angka, spasi, underscore (_) dan tanda kurung ().',
+                'harga_per_kg.required' => 'Harga per kg wajib diisi.',
+                'harga_per_kg.numeric' => 'Harga per kg harus berupa angka.',
+                'harga_per_kg.min' => 'Harga per kg harus lebih dari Rp 0.',
+                'harga_per_kg.max' => 'Harga per kg tidak boleh lebih dari Rp 999.999.',
+                'status.required' => 'Status wajib dipilih.',
+                'status.boolean' => 'Status harus berupa Aktif atau Nonaktif.',
+            ]
+        );
 
         // Cek apakah nama jenis sampah sudah ada
         $sudahAda = JenisSampah::whereRaw(
@@ -80,11 +104,23 @@ class JenisSampahController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'nama_sampah' => 'required|string|max:255',
-            'harga_per_kg' => 'required|numeric|min:0',
-            'status' => 'required|boolean',
-        ]);
+        $request->validate(
+            [
+                'nama_sampah' => 'required|string|max:255|regex:/^[A-Za-z0-9_() ]+$/',
+                'harga_per_kg' => 'required|numeric|min:1|max:999999',
+                'status' => 'required|boolean',
+            ],
+            [
+                'nama_sampah.required' => 'Nama sampah wajib diisi.',
+                'nama_sampah.regex' => 'Nama sampah hanya boleh berisi huruf, angka, spasi, underscore (_) dan tanda kurung ().',
+                'harga_per_kg.required' => 'Harga per kg wajib diisi.',
+                'harga_per_kg.numeric' => 'Harga per kg harus berupa angka.',
+                'harga_per_kg.min' => 'Harga per kg harus lebih dari Rp 0.',
+                'harga_per_kg.max' => 'Harga per kg tidak boleh lebih dari Rp 999.999.',
+                'status.required' => 'Status wajib dipilih.',
+                'status.boolean' => 'Status harus berupa Aktif atau Nonaktif.',
+            ]
+        );
 
         $jenisSampah = JenisSampah::findOrFail($id);
 

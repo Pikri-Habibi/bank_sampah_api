@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
     <title>Setor Sampah - Bank Sampah Griya Ayu</title>
 
     <style>
@@ -16,100 +21,6 @@
             font-family: Arial, Helvetica, sans-serif;
             background: #f4f8f7;
             color: #172b2b;
-        }
-
-        /* =========================
-           SIDEBAR
-        ========================= */
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 230px;
-            height: 100vh;
-            background: #0d463f;
-            color: white;
-            padding: 20px 18px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 35px;
-        }
-
-        .brand-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: #319d7c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 21px;
-        }
-
-        .brand-text {
-            font-size: 15px;
-            font-weight: bold;
-            line-height: 1.25;
-        }
-
-        .menu-title {
-            font-size: 11px;
-            color: #9cc2ba;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-        }
-
-        .menu {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .menu a {
-            text-decoration: none;
-            color: #e4f1ef;
-            padding: 13px 14px;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-        }
-
-        .menu a:hover {
-            background: rgba(255,255,255,0.08);
-        }
-
-        .menu a.active {
-            background: #2c8069;
-            color: white;
-            font-weight: bold;
-        }
-
-        .menu-icon {
-            width: 20px;
-            text-align: center;
-            font-size: 17px;
-        }
-
-        .sidebar-bottom {
-            margin-top: auto;
-            border-top: 1px solid rgba(255,255,255,0.12);
-            padding-top: 18px;
-        }
-
-        .petugas-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 18px;
         }
 
         .petugas-avatar {
@@ -443,75 +354,7 @@
          SIDEBAR
     ========================== -->
 
-    <aside class="sidebar">
-
-        <div class="brand">
-            <div class="brand-icon">
-                ♻
-            </div>
-
-            <div class="brand-text">
-                Bank Sampah<br>
-                Griya Ayu
-            </div>
-        </div>
-
-        <div class="menu-title">
-            Menu
-        </div>
-
-        <nav class="menu">
-
-            <a href="{{ route('petugas.dashboard') }}">
-                <span class="menu-icon">⌂</span>
-                <span>Dashboard</span>
-            </a>
-
-            <a href="{{ url('/setor-sampah') }}" class="active">
-                <span class="menu-icon">♻</span>
-                <span>Setor Sampah</span>
-            </a>
-
-            <a href="#">
-                <span class="menu-icon">▤</span>
-                <span>Riwayat Transaksi</span>
-            </a>
-
-            <a href="#">
-                <span class="menu-icon">Rp</span>
-                <span>Penarikan Saldo</span>
-            </a>
-
-        </nav>
-
-
-        <div class="sidebar-bottom">
-
-            <div class="petugas-info">
-
-                <div class="petugas-avatar">
-                    {{ strtoupper(substr(auth()->user()->name ?? 'P', 0, 1)) }}
-                </div>
-
-                <div>
-                    <div class="petugas-name">
-                        {{ auth()->user()->name ?? 'Petugas' }}
-                    </div>
-
-                    <div class="petugas-role">
-                        Petugas Pelayanan
-                    </div>
-                </div>
-
-            </div>
-
-            <a href="{{ route('logout') }}" class="menu logout">
-                ↪ Keluar
-            </a>
-
-        </div>
-
-    </aside>
+    @include('layouts.sidebar-petugas')
 
 
     <!-- =========================
