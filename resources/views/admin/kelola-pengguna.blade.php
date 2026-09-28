@@ -727,6 +727,7 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>Email</th>
+                            <th>No. Telepon</th>
                             <th>Role</th>
                             <th>Status</th>
                             <th>Aksi</th>
@@ -738,6 +739,12 @@
                     <tbody>
 
                         @forelse($users as $index => $u)
+                            @php
+                                $phone = $u->nasabah?->no_telepon
+                                    ?? $u->petugas?->no_telepon
+                                    ?? $u->admin?->no_telepon
+                                    ?? '-';
+                            @endphp
 
                             <tr>
 
@@ -765,6 +772,10 @@
 
                                 <td style="color:#6b7280;">
                                     {{ $u->email }}
+                                </td>
+
+                                <td style="color:#6b7280;">
+                                    {{ $phone }}
                                 </td>
 
 
@@ -802,9 +813,10 @@
                                             class="btn-icon btn-edit"
                                             onclick="openEditModal(
                                                 {{ $u->id }},
-                                                '{{ addslashes($u->name) }}',
-                                                '{{ $u->role }}',
-                                                '{{ $u->status ?? 'active' }}'
+                                                @js($u->name),
+                                                @js($u->role),
+                                                @js($u->status ?? 'active'),
+                                                @js($phone)
                                             )"
                                             title="Edit"
                                         >
@@ -868,7 +880,7 @@
                         @empty
 
                             <tr>
-                                <td colspan="6" class="empty-state">
+                                <td colspan="7" class="empty-state">
                                     Tidak ada data pengguna
                                 </td>
                             </tr>
@@ -947,6 +959,25 @@
 
                 <div class="form-group">
 
+                    <label class="form-label" for="addPhone">
+                        Nomor Telepon
+                    </label>
+
+                    <input
+                        id="addPhone"
+                        type="tel"
+                        name="no_telepon"
+                        class="form-input"
+                        value="{{ old('no_telepon') }}"
+                        maxlength="20"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
                     <label class="form-label">
                         Email
                     </label>
@@ -974,6 +1005,24 @@
                         class="form-input"
                         required
                         minlength="6"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label class="form-label" for="editPhone">
+                        Nomor Telepon
+                    </label>
+
+                    <input
+                        type="tel"
+                        name="no_telepon"
+                        id="editPhone"
+                        class="form-input"
+                        maxlength="20"
+                        required
                     >
 
                 </div>
@@ -1276,9 +1325,10 @@
 
         /* ================= EDIT MODAL ================= */
 
-        function openEditModal(id, name, role, status) {
+        function openEditModal(id, name, role, status, phone) {
 
             document.getElementById('editName').value = name;
+            document.getElementById('editPhone').value = phone;
 
             document.getElementById('editRole').value = role;
 

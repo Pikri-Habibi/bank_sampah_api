@@ -1,357 +1,209 @@
 <style>
-
-    .sidebar-petugas {
+    .sidebar {
         position: fixed;
-        left: 0;
+        z-index: 1000;
         top: 0;
+        left: 0;
+        display: flex;
         width: 230px;
         height: 100vh;
-
-        background: #123d36;
-        color: white;
-
-        display: flex;
         flex-direction: column;
-
-        z-index: 1000;
+        padding: 20px 18px;
+        background: #123d36;
+        color: #fff;
     }
 
-
-    /* ================================
-       BRAND
-    ================================= */
-
-    .brand-petugas {
+    .brand {
         display: flex;
         align-items: center;
-
-        gap: 10px;
-
-        padding: 24px 18px 20px;
+        gap: 12px;
+        margin-bottom: 35px;
     }
 
     .brand-icon {
-        width: 30px;
-        height: 30px;
-
         display: flex;
+        width: 40px;
+        height: 40px;
         align-items: center;
         justify-content: center;
-
+        border-radius: 10px;
+        background: #319d7c;
         font-size: 21px;
     }
 
-    .brand-name {
-        font-size: 16px;
-        font-weight: bold;
-
+    .brand-text {
+        font-size: 15px;
+        font-weight: 700;
         line-height: 1.25;
     }
 
-
-    /* ================================
-       MENU
-    ================================= */
-
     .menu-title {
-        padding: 0 18px 10px;
-
+        margin-bottom: 12px;
+        color: #9cc2ba;
         font-size: 11px;
-
-        color: #8eb5aa;
-
         text-transform: uppercase;
     }
 
-    .menu-petugas {
+    .menu {
         display: flex;
         flex-direction: column;
-
-        gap: 5px;
-
-        padding: 0 10px;
+        gap: 6px;
     }
 
-    .menu-petugas a {
+    .menu a,
+    .logout {
         display: flex;
         align-items: center;
-
-        gap: 10px;
-
-        padding: 12px 12px;
-
-        border-radius: 9px;
-
-        color: #d8ebe6;
-
+        gap: 12px;
+        padding: 12px 14px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: #e4f1ef;
+        font: inherit;
+        font-size: 14px;
+        text-align: left;
         text-decoration: none;
-
-        font-size: 13px;
-
-        transition: 0.2s;
+        cursor: pointer;
     }
 
-    .menu-petugas a:hover {
+    .menu a:hover,
+    .logout:hover {
         background: rgba(255, 255, 255, 0.08);
-        color: white;
     }
 
-    .menu-petugas a.active {
-        background: #2d765d;
-        color: white;
-        font-weight: bold;
+    .menu a.active {
+        background: #2c8069;
+        color: #fff;
+        font-weight: 700;
     }
 
     .menu-icon {
+        display: inline-flex;
         width: 20px;
-        min-width: 20px;
-
-        display: flex;
+        flex: 0 0 20px;
         align-items: center;
         justify-content: center;
-
-        font-size: 14px;
+        font-size: 17px;
     }
 
-
-    /* ================================
-       BOTTOM USER
-    ================================= */
-
-    .sidebar-bottom-petugas {
+    .sidebar-bottom {
         margin-top: auto;
-
-        padding: 15px 18px 20px;
-
         border-top: 1px solid rgba(255, 255, 255, 0.12);
+        padding-top: 18px;
     }
 
-    .user-info-petugas {
+    .petugas-info {
         display: flex;
         align-items: center;
-
         gap: 10px;
-
-        margin-bottom: 15px;
+        margin-bottom: 12px;
     }
 
-    .user-avatar-petugas {
+    .petugas-avatar {
+        display: flex;
         width: 34px;
         height: 34px;
-
-        border-radius: 50%;
-
-        background: #4fb287;
-
-        display: flex;
+        flex: 0 0 34px;
         align-items: center;
         justify-content: center;
-
-        font-size: 13px;
-        font-weight: bold;
+        border-radius: 50%;
+        background: #50ba8c;
+        font-weight: 700;
     }
 
-    .user-name-petugas {
+    .petugas-name {
         font-size: 12px;
-        font-weight: bold;
+        font-weight: 700;
     }
 
-    .user-role-petugas {
-        margin-top: 3px;
-
+    .petugas-role {
+        margin-top: 2px;
+        color: #a9cbc4;
         font-size: 10px;
-
-        color: #9fc1b8;
     }
 
-    .logout-petugas {
-        display: block;
-
-        color: #d8ebe6;
-
-        text-decoration: none;
-
-        font-size: 12px;
+    .logout {
+        width: 100%;
+        color: #ffaaa3;
     }
 
-    .logout-petugas:hover {
-        color: rgb(235, 0, 0);
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 200px;
+            padding: 16px 14px;
+        }
     }
 
+    @media (max-width: 600px) {
+        .sidebar {
+            width: 64px;
+            align-items: center;
+            padding: 16px 8px;
+        }
+
+        .brand-text,
+        .menu-title,
+        .menu a span:not(.menu-icon),
+        .petugas-info > div,
+        .logout span {
+            display: none;
+        }
+
+        .brand {
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .menu a,
+        .logout {
+            justify-content: center;
+            padding: 12px;
+        }
+    }
 </style>
 
-
-<aside class="sidebar-petugas">
-
-
-    {{-- BRAND --}}
-
-    <div class="brand-petugas">
-
-        <div class="brand-icon">
-            <i class="fa-solid fa-building-columns"></i>
-        </div>
-
-        <div class="brand-name">
-            Bank Sampah<br>
-            Griya Ayu
-        </div>
-
+<aside class="sidebar">
+    <div class="brand">
+        <div class="brand-icon">♻</div>
+        <div class="brand-text">Bank Sampah<br>Griya Ayu</div>
     </div>
 
-
-    {{-- MENU --}}
-
-    <div class="menu-title">
-        Menu
-    </div>
-
-
-    <nav class="menu-petugas">
-
-
-        {{-- DASHBOARD --}}
-
-        <a
-            href="{{ route('petugas.dashboard') }}"
-            class="{{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}"
-        >
-
-            <span class="menu-icon">
-                <i class="fa-solid fa-house"></i>
-            </span>
-
-            <span>
-                Dashboard
-            </span>
-
+    <div class="menu-title">Menu</div>
+    <nav class="menu">
+        <a href="{{ route('petugas.dashboard') }}" class="{{ request()->routeIs('petugas.dashboard') ? 'active' : '' }}">
+            <span class="menu-icon">⌂</span>
+            <span>Dashboard</span>
         </a>
-
-
-        {{-- SETOR SAMPAH --}}
-
-        <a
-            href="{{ route('petugas.setoran.create') }}"
-            class="{{ request()->routeIs('petugas.setoran.create') ? 'active' : '' }}"
-        >
-
-            <span class="menu-icon">
-                <i class="fa-solid fa-recycle"></i>
-            </span>
-
-            <span>
-                Setor Sampah
-            </span>
-
+        <a href="{{ route('petugas.setoran.create') }}" class="{{ request()->routeIs('petugas.setoran.*') ? 'active' : '' }}">
+            <span class="menu-icon">♻</span>
+            <span>Setor Sampah</span>
         </a>
-
-
-        {{-- RIWAYAT TRANSAKSI --}}
-
-        <a href="#">
-
-            <span class="menu-icon">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-            </span>
-
-            <span>
-                Riwayat Transaksi
-            </span>
-
+        <a href="{{ route('petugas.transaksi.history') }}" class="{{ request()->routeIs('petugas.transaksi.*') ? 'active' : '' }}">
+            <span class="menu-icon">▤</span>
+            <span>Riwayat Transaksi</span>
         </a>
-
-
-        {{-- PENARIKAN SALDO --}}
-
-        <a
-            href="{{ route('petugas.penarikan.index') }}"
-            class="{{ request()->routeIs('petugas.penarikan.*') ? 'active' : '' }}"
-        >
-
-            <span class="menu-icon">
-                <i class="fa-solid fa-money-bill-transfer"></i>
-            </span>
-
-            <span>
-                Penarikan Saldo
-            </span>
-
+        <a href="{{ route('petugas.penarikan.index') }}" class="{{ request()->routeIs('petugas.penarikan.*') ? 'active' : '' }}">
+            <span class="menu-icon">Rp</span>
+            <span>Penarikan Saldo</span>
         </a>
-
-
     </nav>
 
-
-    {{-- USER --}}
-
-    <div class="sidebar-bottom-petugas">
-
-
-        <div class="user-info-petugas">
-
-
-            <div class="user-avatar-petugas">
-                {{ strtoupper(substr(auth()->user()->name ?? 'P', 0, 1)) }}
-            </div>
-
-
+    <div class="sidebar-bottom">
+        <div class="petugas-info">
+            <div class="petugas-avatar">{{ strtoupper(substr(auth()->user()->name ?? 'P', 0, 1)) }}</div>
             <div>
-
-                <div class="user-name-petugas">
-
-                    {{ auth()->user()->name ?? 'Petugas' }}
-
-                </div>
-
-
-                <div class="user-role-petugas">
-
-                    Petugas Pelayanan
-
-                </div>
-
+                <div class="petugas-name">{{ auth()->user()->name ?? 'Petugas' }}</div>
+                <div class="petugas-role">Petugas Pelayanan</div>
             </div>
-
-
         </div>
 
-
-        {{-- LOGOUT --}}
-
-        <form
-            action="{{ route('logout') }}"
-            method="POST"
-        >
-
+        <form action="{{ route('logout') }}" method="POST">
             @csrf
-
-            <button
-                type="submit"
-                class="logout-petugas"
-                style="
-                    background: none;
-                    border: none;
-                    padding: 0;
-                    cursor: pointer;
-                    font-family: inherit;
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                "
-            >
-
-                <i class="fa-solid fa-right-from-bracket"></i>
-
-                <span>
-                    Keluar
-                </span>
-
+            <button class="logout" type="submit">
+                <span class="menu-icon">↪</span>
+                <span>Keluar</span>
             </button>
-
         </form>
-
-
     </div>
-
-
 </aside>

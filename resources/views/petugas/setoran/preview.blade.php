@@ -17,6 +17,10 @@
     </style>
 </head>
 <body>
+    @php
+        /** @var \App\Models\HargaSampah $harga */
+    @endphp
+
     <div class="container">
         <h2>Preview Setoran</h2>
 

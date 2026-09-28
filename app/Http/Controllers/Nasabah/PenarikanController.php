@@ -5,15 +5,16 @@ namespace App\Http\Controllers\Nasabah;
 use App\Http\Controllers\Controller;
 use App\Models\Penarikan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PenarikanController extends Controller
 {
     public function create()
-{
-        $user = auth()->user();
+    {
+        $user = Auth::user();
 
-        if (!$user || $user->role !== 'nasabah') {
+        if (! $user || $user->role !== 'nasabah') {
             abort(403, 'Akses ditolak.');
         }
 
@@ -23,9 +24,9 @@ class PenarikanController extends Controller
             'id_pengguna_nasabah',
             $nasabah->id_pengguna_nasabah
         )
-        ->orderBy('tgl_pengajuan', 'desc')
-        ->orderBy('id_penarikan', 'desc')
-        ->get();
+            ->orderBy('tgl_pengajuan', 'desc')
+            ->orderBy('id_penarikan', 'desc')
+            ->get();
 
         return view(
             'nasabah.penarikan.create',
@@ -35,9 +36,9 @@ class PenarikanController extends Controller
 
     public function store(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
-        if (!$user || $user->role !== 'nasabah') {
+        if (! $user || $user->role !== 'nasabah') {
             abort(403, 'Akses ditolak.');
         }
 
@@ -47,7 +48,7 @@ class PenarikanController extends Controller
 
         $nasabah = $user->nasabah;
 
-        if (!$nasabah) {
+        if (! $nasabah) {
             abort(403, 'Akun ini belum terdaftar sebagai nasabah.');
         }
 
@@ -87,15 +88,15 @@ class PenarikanController extends Controller
             ->route('nasabah.dashboard')
             ->with(
                 'success',
-                'Pengajuan penarikan berhasil dibuat. Kode verifikasi: ' . $kode
+                'Pengajuan penarikan berhasil dibuat. Kode verifikasi: '.$kode
             );
     }
 
     public function edit($id)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
-        if (!$user || $user->role !== 'nasabah') {
+        if (! $user || $user->role !== 'nasabah') {
             abort(403, 'Akses ditolak.');
         }
 
@@ -105,12 +106,12 @@ class PenarikanController extends Controller
             'id_penarikan',
             $id
         )
-        ->where(
-            'id_pengguna_nasabah',
-            $nasabah->id_pengguna_nasabah
-        )
-        ->where('status', 'pending')
-        ->firstOrFail();
+            ->where(
+                'id_pengguna_nasabah',
+                $nasabah->id_pengguna_nasabah
+            )
+            ->where('status', 'pending')
+            ->firstOrFail();
 
         return view(
             'nasabah.penarikan.edit',
@@ -118,12 +119,11 @@ class PenarikanController extends Controller
         );
     }
 
-
     public function update(Request $request, $id)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
-        if (!$user || $user->role !== 'nasabah') {
+        if (! $user || $user->role !== 'nasabah') {
             abort(403, 'Akses ditolak.');
         }
 
@@ -137,12 +137,12 @@ class PenarikanController extends Controller
             'id_penarikan',
             $id
         )
-        ->where(
-            'id_pengguna_nasabah',
-            $nasabah->id_pengguna_nasabah
-        )
-        ->where('status', 'pending')
-        ->firstOrFail();
+            ->where(
+                'id_pengguna_nasabah',
+                $nasabah->id_pengguna_nasabah
+            )
+            ->where('status', 'pending')
+            ->firstOrFail();
 
         $nominal = (float) $request->nominal;
 
@@ -161,12 +161,11 @@ class PenarikanController extends Controller
             ->with('success', 'Nominal penarikan berhasil diubah.');
     }
 
-
     public function destroy($id)
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
-        if (!$user || $user->role !== 'nasabah') {
+        if (! $user || $user->role !== 'nasabah') {
             abort(403, 'Akses ditolak.');
         }
 
@@ -176,12 +175,12 @@ class PenarikanController extends Controller
             'id_penarikan',
             $id
         )
-        ->where(
-            'id_pengguna_nasabah',
-            $nasabah->id_pengguna_nasabah
-        )
-        ->where('status', 'pending')
-        ->firstOrFail();
+            ->where(
+                'id_pengguna_nasabah',
+                $nasabah->id_pengguna_nasabah
+            )
+            ->where('status', 'pending')
+            ->firstOrFail();
 
         $penarikan->delete();
 
@@ -192,15 +191,15 @@ class PenarikanController extends Controller
 
     public function riwayat()
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
-        if (!$user || $user->role !== 'nasabah') {
+        if (! $user || $user->role !== 'nasabah') {
             abort(403, 'Akses ditolak.');
         }
 
         $nasabah = $user->nasabah;
 
-        if (!$nasabah) {
+        if (! $nasabah) {
             abort(403, 'Akun ini belum terdaftar sebagai nasabah.');
         }
 

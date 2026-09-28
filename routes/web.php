@@ -1,19 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Auth\AuthController;
-
 use App\Http\Controllers\Admin\UserController;
-
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Nasabah\HargaSampahController;
 use App\Http\Controllers\Nasabah\NasabahDashboardController;
 use App\Http\Controllers\Nasabah\PenarikanController;
-
 use App\Http\Controllers\Petugas\PetugasDashboardController;
 use App\Http\Controllers\Petugas\PetugasPenarikanController;
 use App\Http\Controllers\Petugas\PetugasSetoranController;
-use App\Http\Controllers\Nasabah\HargaSampahController;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 // ======================================================
 // REDIRECT UTAMA
@@ -23,7 +19,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
 // ======================================================
 // LOGIN
 // ======================================================
@@ -32,14 +27,19 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])
     ->name('login');
 
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])
+    ->name('register');
+
 // Memproses login
 Route::middleware('guest')->group(function () {
+
+    Route::post('/register', [AuthController::class, 'register'])
+        ->name('register.store');
 
     Route::post('/login', [AuthController::class, 'login'])
         ->name('login.process');
 
 });
-
 
 // ======================================================
 // ROUTE YANG MEMBUTUHKAN LOGIN
@@ -54,14 +54,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])
         ->name('logout');
 
-
     // --------------------------------------------------
     // ADMIN
     // --------------------------------------------------
 
     Route::get('/admin/dashboard', function () {
 
-        if (auth()->user()?->role !== 'admin') {
+        if (Auth::user()?->role !== 'admin') {
             abort(403, 'Akses ditolak.');
         }
 
@@ -69,18 +68,16 @@ Route::middleware('auth')->group(function () {
 
     })->name('dashboard.admin');
 
-
     // Kelola Sampah
     Route::get('/kelola-sampah', function () {
 
-        if (auth()->user()?->role !== 'admin') {
+        if (Auth::user()?->role !== 'admin') {
             abort(403, 'Akses ditolak.');
         }
 
         return view('admin.kelola-sampah');
 
     })->name('kelola.sampah');
-
 
     // Kelola Pengguna
     Route::get('/admin/kelola-pengguna', [UserController::class, 'index'])
@@ -95,7 +92,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/kelola-pengguna/{id}', [UserController::class, 'destroy'])
         ->name('admin.users.destroy');
 
-
     // --------------------------------------------------
     // PETUGAS
     // --------------------------------------------------
@@ -103,21 +99,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/petugas/dashboard', [PetugasDashboardController::class, 'index'])
         ->name('petugas.dashboard');
 
-
     // Halaman setor sampah
     Route::get('/petugas/setoran', [PetugasSetoranController::class, 'create'])
         ->name('petugas.setoran.create');
-
 
     // Proses simpan setoran multi-jenis
     Route::post('/petugas/setoran', [PetugasSetoranController::class, 'store'])
         ->name('petugas.setoran.store');
 
-
     // Preview setoran
-    Route::post('/petugas/setoran/preview', [PetugasSetoranController::class, 'preview'])
+    Route::match(['GET', 'POST'], '/petugas/setoran/preview', [PetugasSetoranController::class, 'preview'])
         ->name('petugas.setoran.preview');
 
+    // Riwayat transaksi nasabah
+    Route::get('/petugas/transaksi/history', [PetugasSetoranController::class, 'history'])
+        ->name('petugas.transaksi.history');
 
     // --------------------------------------------------
     // PENARIKAN SALDO
@@ -132,10 +128,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/petugas/penarikan/{id}/verify', [PetugasPenarikanController::class, 'verify'])
         ->name('petugas.penarikan.verify');
 
-
-
     // --------------------------------------------------
-    // NASABAH
+    // NASABAH,
     // --------------------------------------------------
 
     Route::get('/nasabah/dashboard', [NasabahDashboardController::class, 'index'])

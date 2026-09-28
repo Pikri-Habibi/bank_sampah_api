@@ -12,44 +12,17 @@
     <title>Setor Sampah - Bank Sampah Griya Ayu</title>
 
     <style>
-        * {
+         * {
             box-sizing: border-box;
         }
 
         body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f7fb;
             margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f8f7;
-            color: #172b2b;
+            padding: 0;
+            color: #1f2937;
         }
-
-        .petugas-avatar {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            background: #50ba8c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .petugas-name {
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .petugas-role {
-            font-size: 10px;
-            color: #a9cbc4;
-            margin-top: 2px;
-        }
-
-        .logout {
-            color: #ff6b61 !important;
-            padding-left: 0 !important;
-        }
-
 
         /* =========================
            MAIN CONTENT
@@ -314,13 +287,8 @@
         ========================= */
 
         @media (max-width: 800px) {
-
-            .sidebar {
-                width: 190px;
-            }
-
             .main {
-                margin-left: 190px;
+                margin-left: 200px;
                 padding: 25px 18px;
             }
 
@@ -330,19 +298,8 @@
         }
 
         @media (max-width: 600px) {
-
-            .sidebar {
-                position: static;
-                width: 100%;
-                height: auto;
-            }
-
             .main {
-                margin-left: 0;
-            }
-
-            .sidebar-bottom {
-                margin-top: 20px;
+                margin-left: 64px;
             }
         }
     </style>

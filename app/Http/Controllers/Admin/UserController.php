@@ -3,26 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Admin;
 use App\Models\Nasabah;
 use App\Models\Petugas;
-use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    private function createRoleProfile(User $user, string $role, ?string $name = null): void
+    private function createRoleProfile(User $user, string $role, string $name, string $phone): void
     {
-        $name = $name ?? $user->name;
-
         if ($role === 'admin') {
             Admin::updateOrCreate(
                 ['user_id' => $user->id],
                 [
                     'nama_lengkap' => $name,
-                    'no_telepon' => '-',
+                    'no_telepon' => $phone,
                 ]
             );
 
@@ -34,7 +32,7 @@ class UserController extends Controller
                 ['user_id' => $user->id],
                 [
                     'nama_lengkap' => $name,
-                    'no_telepon' => '-',
+                    'no_telepon' => $phone,
                 ]
             );
 
@@ -46,7 +44,7 @@ class UserController extends Controller
                 ['user_id' => $user->id],
                 [
                     'nama_lengkap' => $name,
-                    'no_telepon' => '-',
+                    'no_telepon' => $phone,
                     'saldo' => 0,
                 ]
             );
@@ -64,29 +62,36 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with(['admin', 'petugas', 'nasabah'])->get();
+
         return view('admin.kelola-pengguna', compact('users'));
     }
 
     // 2. Menyimpan pengguna baru
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'role' => 'required|in:admin,petugas,nasabah',
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'no_telepon' => ['required', 'string', 'max:20'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6'],
+            'role' => ['required', 'in:admin,petugas,nasabah'],
         ]);
 
-        DB::transaction(function () use ($request) {
+        DB::transaction(function () use ($validated) {
             $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role' => $request->role,
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => $validated['role'],
                 'status' => 'active',
             ]);
 
-            $this->createRoleProfile($user, $request->role, $request->name);
+            $this->createRoleProfile(
+                $user,
+                $validated['role'],
+                $validated['name'],
+                $validated['no_telepon']
+            );
         });
 
         return redirect()
@@ -98,21 +103,32 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'no_telepon' => ['required', 'string', 'max:20'],
+            'role' => ['required', 'in:admin,petugas,nasabah'],
+            'status' => ['required', 'in:active,inactive'],
+        ]);
 
-        DB::transaction(function () use ($request, $user) {
+        DB::transaction(function () use ($validated, $user) {
             $currentRole = $user->role;
 
             $user->update([
-                'name' => $request->name,
-                'role' => $request->role,
-                'status' => $request->status,
+                'name' => $validated['name'],
+                'role' => $validated['role'],
+                'status' => $validated['status'],
             ]);
 
-            if ($currentRole !== $request->role) {
+            if ($currentRole !== $validated['role']) {
                 $this->removeRoleProfiles($user);
             }
 
-            $this->createRoleProfile($user, $request->role, $request->name);
+            $this->createRoleProfile(
+                $user,
+                $validated['role'],
+                $validated['name'],
+                $validated['no_telepon']
+            );
         });
 
         return redirect()->back()->with('success', 'Data pengguna berhasil diperbarui!');

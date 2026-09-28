@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Petugas;
 
 use App\Http\Controllers\Controller;
-use App\Models\Penarikan;
 use App\Models\Notifikasi;
-use App\Models\Nasabah;
+use App\Models\Penarikan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PetugasPenarikanController extends Controller
 {
@@ -24,7 +24,6 @@ class PetugasPenarikanController extends Controller
             ->orderBy('id_penarikan', 'desc')
             ->get();
 
-
         /*
         |--------------------------------------------------------------------------
         | RIWAYAT PENARIKAN YANG SUDAH DIVERIFIKASI
@@ -33,10 +32,9 @@ class PetugasPenarikanController extends Controller
 
         $query = Penarikan::with([
             'nasabah.user',
-            'petugas'
+            'petugas',
         ])
             ->where('status', 'approved');
-
 
         /*
         |--------------------------------------------------------------------------
@@ -54,7 +52,6 @@ class PetugasPenarikanController extends Controller
 
         }
 
-
         if ($request->filled('tanggal_akhir')) {
 
             $query->whereDate(
@@ -64,7 +61,6 @@ class PetugasPenarikanController extends Controller
             );
 
         }
-
 
         /*
         |--------------------------------------------------------------------------
@@ -77,7 +73,6 @@ class PetugasPenarikanController extends Controller
             ->orderBy('id_penarikan', 'desc')
             ->get();
 
-
         return view(
             'petugas.penarikan.index',
             compact(
@@ -86,7 +81,7 @@ class PetugasPenarikanController extends Controller
             )
         );
     }
-    
+
     public function search(Request $request)
     {
         if ($request->isMethod('GET')) {
@@ -102,9 +97,9 @@ class PetugasPenarikanController extends Controller
             ->where('status', 'pending')
             ->first();
 
-        if (!$penarikan) {
+        if (! $penarikan) {
             return back()->withErrors([
-                'kode' => 'Kode verifikasi tidak ditemukan atau penarikan sudah diproses.'
+                'kode' => 'Kode verifikasi tidak ditemukan atau penarikan sudah diproses.',
             ]);
         }
 
@@ -122,27 +117,27 @@ class PetugasPenarikanController extends Controller
 
         if ($penarikan->status !== 'pending') {
             return back()->withErrors([
-                'status' => 'Penarikan ini sudah diproses.'
+                'status' => 'Penarikan ini sudah diproses.',
             ]);
         }
 
         if ($penarikan->kode_verifikasi !== $request->kode_verifikasi) {
             return back()->withErrors([
-                'kode_verifikasi' => 'Kode verifikasi salah.'
+                'kode_verifikasi' => 'Kode verifikasi salah.',
             ]);
         }
 
         $nasabah = $penarikan->nasabah;
 
-        if (!$nasabah) {
+        if (! $nasabah) {
             return back()->withErrors([
-                'status' => 'Nasabah tidak ditemukan.'
+                'status' => 'Nasabah tidak ditemukan.',
             ]);
         }
 
         if ((float) $nasabah->saldo < (float) $penarikan->nominal) {
             return back()->withErrors([
-                'nominal' => 'Saldo nasabah tidak mencukupi.'
+                'nominal' => 'Saldo nasabah tidak mencukupi.',
             ]);
         }
 
@@ -150,15 +145,15 @@ class PetugasPenarikanController extends Controller
         $nasabah->save();
 
         $penarikan->status = 'approved';
-        $penarikan->id_petugas = auth()->user()->id;
+        $penarikan->id_petugas = Auth::id();
         $penarikan->tanggal_verifikasi = now();
         $penarikan->save();
 
         Notifikasi::create([
             'id_pengguna_nasabah' => $nasabah->id_pengguna_nasabah,
             'judul' => 'Penarikan Disetujui',
-            'pesan' => 'Pengajuan penarikan sebesar Rp ' .
-                number_format((float) $penarikan->nominal, 0, ',', '.') .
+            'pesan' => 'Pengajuan penarikan sebesar Rp '.
+                number_format((float) $penarikan->nominal, 0, ',', '.').
                 ' telah disetujui oleh petugas.',
             'tipe' => 'penarikan',
             'dibaca' => false,

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Bank Sampah Resik Berdaya</title>
+    <title>Daftar Nasabah - Bank Sampah Resik Berdaya</title>
     <style>
         * {
             margin: 0;
@@ -18,7 +18,7 @@
             background-color: #f4f6f9;
         }
 
-        .login-container {
+        .register-container {
             display: flex;
             width: 100%;
             min-height: 100vh;
@@ -44,7 +44,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-           background: url("{{ asset('assets/sampahtumbuhan.jpg') }}") center / cover no-repeat;
+            background: url("{{ asset('assets/sampahtumbuhan.jpg') }}") center / cover no-repeat;
             opacity: 0.5;
         }
 
@@ -59,10 +59,12 @@
             gap: 12px;
         }
 
-        .recycle-icon {
-            width: 48px;
-            height: 48px;
-            fill: white;
+        .brand-icon {
+            font-size: 32px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .brand-name {
@@ -94,7 +96,6 @@
             left: 0;
             right: 0;
             height: 60%;
-
             opacity: 0.85;
         }
 
@@ -124,15 +125,17 @@
             align-items: center;
             padding: 40px;
             background: white;
+            overflow-y: auto;
         }
 
         .form-wrapper {
             width: 100%;
             max-width: 420px;
+            padding: 20px 0;
         }
 
         .form-header {
-            margin-bottom: 32px;
+            margin-bottom: 28px;
         }
 
         .form-header h1 {
@@ -148,7 +151,7 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-group label {
@@ -204,10 +207,10 @@
             height: 20px;
         }
 
-        .btn-masuk {
+        .btn-daftar {
             width: 100%;
             padding: 14px;
-            background:#153834;
+            background: #153834;
             color: white;
             border: none;
             border-radius: 8px;
@@ -215,62 +218,42 @@
             font-weight: 700;
             font-size: 16px;
             transition: all 0.3s ease;
-            margin-top: 8px;
+            margin-top: 10px;
             letter-spacing: 0.5px;
         }
 
-        .btn-masuk:hover {
+        .btn-daftar:hover {
             background: linear-gradient(135deg, #1b4332 0%, #2d6a4f 100%);
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(45, 106, 79, 0.3);
         }
 
-        .btn-masuk:active {
+        .btn-daftar:active {
             transform: translateY(0);
         }
 
-        .forgot-link {
-            display: inline-block;
-            margin-top: 16px;
-            color: #153834;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .forgot-link:hover {
-            color: #1b4332;
-            text-decoration: underline;
-        }
-
-        .register-link {
+        .login-link {
             display: block;
-            margin-top: 14px;
+            margin-top: 18px;
             color: #153834;
             font-size: 14px;
             text-align: center;
             text-decoration: none;
+            font-weight: 500;
         }
 
-        .register-link:hover {
+        .login-link:hover {
             text-decoration: underline;
         }
 
         .form-footer {
-            margin-top: 40px;
+            margin-top: 32px;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 8px;
             color: #6c757d;
             font-size: 12px;
-        }
-
-        .form-footer svg {
-            width: 20px;
-            height: 20px;
-            fill: #2d6a4f;
         }
 
         .error {
@@ -285,7 +268,7 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .login-container {
+            .register-container {
                 flex-direction: column;
             }
 
@@ -329,15 +312,6 @@
                 min-height: 180px;
             }
 
-            .brand-header {
-                gap: 8px;
-            }
-
-            .recycle-icon {
-                width: 36px;
-                height: 36px;
-            }
-
             .brand-name {
                 font-size: 16px;
             }
@@ -378,14 +352,12 @@
 </head>
 <body>
 
-<div class="login-container">
+<div class="register-container">
     <!-- Left Panel -->
     <div class="left-panel">
         <div class="left-panel-content">
-
-        <div class="brand-icon">
-            ♻
-
+            <div class="brand-icon">
+                ♻
                 <div class="brand-name">
                     Bank Sampah
                     <span>Resik Berdaya</span>
@@ -398,7 +370,6 @@
         <div class="left-image"></div>
         <div class="left-panel-bottom">
             <svg class="bottom-recycle" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-
             </svg>
         </div>
     </div>
@@ -407,29 +378,40 @@
     <div class="right-panel">
         <div class="form-wrapper">
             <div class="form-header">
-                <h1>Selamat Datang</h1>
-                <p>Silakan masuk untuk melanjutkan</p>
+                <h1>Daftar Nasabah</h1>
+                <p>Isi data berikut untuk membuat akun nasabah.</p>
             </div>
 
             @if ($errors->any())
-                <div class="error">
+                <div class="error" role="alert">
                     {{ $errors->first() }}
                 </div>
             @endif
 
-            <form action="{{ route('login.process') }}" method="POST">
+            <form action="{{ route('register.store') }}" method="POST">
                 @csrf
+
                 <div class="form-group">
-                    <label for="email">Username / Email</label>
-                    <input type="text" name="email" id="email" value="{{ old('email') }}" placeholder="Masukkan username atau email" required autofocus>
+                    <label for="name">Nama lengkap</label>
+                    <input id="name" name="name" type="text" value="{{ old('name') }}" placeholder="Masukkan nama lengkap" autocomplete="name" required autofocus>
+                </div>
+
+                <div class="form-group">
+                    <label for="no_telepon">Nomor telepon</label>
+                    <input id="no_telepon" name="no_telepon" type="tel" value="{{ old('no_telepon') }}" placeholder="Masukkan nomor telepon" autocomplete="tel" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" value="{{ old('email') }}" placeholder="Masukkan email" autocomplete="email" required>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="input-wrapper">
-                        <input type="password" name="password" id="password" placeholder="Masukkan password" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword()">
-                            <svg id="eye-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <input id="password" name="password" type="password" placeholder="Minimal 8 karakter" autocomplete="new-password" minlength="8" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('password', 'eye-icon-1')">
+                            <svg id="eye-icon-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                 <circle cx="12" cy="12" r="3"></circle>
                             </svg>
@@ -437,17 +419,26 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn-masuk">Masuk</button>
+                <div class="form-group">
+                    <label for="password_confirmation">Konfirmasi password</label>
+                    <div class="input-wrapper">
+                        <input id="password_confirmation" name="password_confirmation" type="password" placeholder="Ulangi password" autocomplete="new-password" minlength="8" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('password_confirmation', 'eye-icon-2')">
+                            <svg id="eye-icon-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn-daftar" type="submit">Daftar sebagai nasabah</button>
             </form>
 
-            <a href="#" class="forgot-link">Lupa password?</a>
-            <a href="{{ route('register') }}" class="register-link">Belum punya akun? Daftar sebagai nasabah</a>
+            <a class="login-link" href="{{ route('login') }}">Sudah punya akun? Masuk</a>
 
             <div class="form-footer">
-
-        <div class="brand-icon">
-            ♻
-        </div>
+                <div class="brand-icon" style="font-size: 16px;">♻</div>
                 <span>Bank Sampah Resik Berdaya</span>
             </div>
         </div>
@@ -455,9 +446,9 @@
 </div>
 
 <script>
-    function togglePassword() {
-        const passwordInput = document.getElementById('password');
-        const eyeIcon = document.getElementById('eye-icon');
+    function togglePassword(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(iconId);
 
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
